@@ -10,8 +10,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../../../../hooks/useAuth';
 
+
 const Navigation = () => {
-  const {user,logout} =useAuth() 
+  const {user,logout} =useAuth(); 
     return (
         <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

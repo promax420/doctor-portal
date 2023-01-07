@@ -23,7 +23,7 @@ const Login = () => {
        <Container>
         <Grid container spacing={2}>
   <Grid item sx={{mt:8}} xs={12} md={6}>
-  <Typography variant="body1" gutterBottom>Register</Typography>
+  <Typography variant="body1" gutterBottom>login</Typography>
   <form onSubmit={handleLoginSubmit}>
   <TextField
           sx={{width:'75%',m:1}}

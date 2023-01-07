@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, TextField, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import login from '../../../images/login.png'
 import { NavLink } from 'react-router-dom';
@@ -8,13 +8,14 @@ import useAuth from '../../../hooks/useAuth';
 
 const Register  = () => {
     const[loginData,setLoginData]= useState({})
-    const {registerUser} =useAuth
+    const { registerUser, isloading} =useAuth();
     const handleOnChange = e =>{
         const field =e.target.name;
         const value = e.target.value;
        const newLoginData ={...loginData};
        newLoginData[field]= value;
        setLoginData(newLoginData);
+       console.log(newLoginData);
 
     }
     const handleLoginSubmit = e =>{
@@ -30,8 +31,8 @@ const Register  = () => {
         <Container>
         <Grid container spacing={2}>
   <Grid item sx={{mt:8}} xs={12} md={6}>
-  <Typography variant="body1" gutterBottom>Login</Typography>
-  <form onSubmit={handleLoginSubmit}>
+  <Typography variant="body1" gutterBottom>Register</Typography>
+  { !isloading && <form onSubmit={handleLoginSubmit}>
   <TextField
           sx={{width:'75%',m:1}}
            id="standard-basic" 
@@ -58,14 +59,16 @@ const Register  = () => {
          onChange={handleOnChange}
          variant="standard" />
 
-         <Button  sx={{width:'75%',m:1}}type="submit"variant="contained">login</Button>
+         <Button  sx={{width:'75%',m:1}}type="submit"variant="contained">Register</Button>
          <NavLink
            style={{textDecoration:'none'}}
             to="/login">
             <Button variant="text">Already Registered? please Login</Button>
            </NavLink>
-  </form>
-  </Grid>
+  </form>}
+   {isloading && <CircularProgress />}
+   
+   </Grid>
   <Grid item xs={12} md={6}>
   <img style={{width:'100%'}} src={login} alt="" />
   </Grid>
