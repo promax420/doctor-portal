@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 
 InitializeFirebase();
@@ -20,25 +20,25 @@ const Userfirebase = () => {
   const auth = getAuth();
   const googleprovider = new GoogleAuthProvider();
 
-  const registerUser = (email, password,name,history) => {
+  const registerUser = (email, password, name, history) => {
     setisloding(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-      seAuthtError('')
-      history.replace('/');
-      const newUser ={email,displayName:name}
-      setUser(newUser)
-      //send name to firebase after creation
-      updateProfile(auth.currentUser, {
-        displayName:name
-       
-      }).catch((error) => {
-       
-      }).then(() => {
-      });
-      
-      history.replace('/');
+        seAuthtError("");
+        history.replace("/");
+        const newUser = { email, displayName: name };
+        setUser(newUser);
+        //save user to the database
+        saveUser(email, name);
+        //send name to firebase after creation
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        })
+          .catch((error) => {})
+          .then(() => {});
+
+        history.replace("/");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -52,7 +52,7 @@ const Userfirebase = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const distination = location?.state?.from || '/';
+        const distination = location?.state?.from || "/";
         history.replace(distination);
         seAuthtError("");
         // ...
@@ -63,20 +63,19 @@ const Userfirebase = () => {
       .finally(() => setisloding(false));
   };
 
-const signInWithGoogle =(location,history) =>{
-  setisloding(true);
-  signInWithPopup(auth,googleprovider)
-  .then((result) => {
-   
-    const user = result.user;
-    seAuthtError("");
-  }).catch((error) => {
-    // Handle Errors here.
-    seAuthtError(error.message);
-  }).finally(() => setisloding(false));
-
-}
-
+  const signInWithGoogle = (location, history) => {
+    setisloding(true);
+    signInWithPopup(auth, googleprovider)
+      .then((result) => {
+        const user = result.user;
+        seAuthtError("");
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        seAuthtError(error.message);
+      })
+      .finally(() => setisloding(false));
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -101,6 +100,18 @@ const signInWithGoogle =(location,history) =>{
       })
       .catch(() => setisloding(false));
   };
+
+  const saveUser = (email, displayName) => {
+    const user = { email, displayName };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    }).then();
+  };
+
   return {
     user,
     isloading,
